@@ -1,0 +1,24 @@
+---
+- name: Deploy and Configure Follower on Openshift on POC Or Cluster B.
+  hosts:  openshift
+  become: true
+  # vars:
+  #     oc_service_account_token: "eyJhbGciOiJSUzI1NiIsImtpZCI6Ikh2c2V4SG1YNGtNcGxLQVRtMjdSX0g3eTJuWHpZb0dIc0RJTVRXd3JUN0UifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkYXAiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoiZGFwLWZvbGxvd2VyLWRlcGxveS10b2tlbi1mNDlkbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJkYXAtZm9sbG93ZXItZGVwbG95Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiYmIwMzUyZmItMGMxMC00YWI3LWEzNDMtNGE0OTg2ZmYxYzA5Iiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRhcDpkYXAtZm9sbG93ZXItZGVwbG95In0.dgl2VEiIxyrikVtJ6atSfJXssRDjT71i3Fs8mtGv1jAk2JY6Z79z470tR_MQ2iWWzCGrgyRZd43WZ4FgGMgQRgERKN-Fypc5NNCqNBLMOQ8mefRBhclAd_G79zo_ghU4ezvfSUQAOmO8mhk-XNhVECw9Ji0W68vJIRu6NUv_aDM8rSM3-Alvhtdqjylbrii_ApLgfRCUext_WzXsHtHns7uqLKV3EdlGRWgUGgi0XT5Ru6wzQtq6qdBUXI_4FI9xsXVWDfsYsAgui7ibQuaj2DaOdeAzSy47extVkkn2LrHrOq31VA5BlaeLj6YWG4CLa5B-FbvY8yELGLNnYxWJlw"
+  #     api_server_url: "https://kubernetes-api-url:6443"
+  vars_files:
+    - ../vars/group_vars/pocb/all.yml  
+
+  tasks:
+    - module_defaults:
+        group/k8s:
+          validate_certs: no
+          kubeconfig: "/root/ocp-install-{{cluster_name}}/auth/kubeconfig"
+          
+      name: "Run Conjur Follower Tasks on {{cluster_name}}"
+      block:
+        - import_role:
+            name: create-svc-account
+        - import_role:
+            name: configure-follower
+        # - import_role:
+        #     name: policies

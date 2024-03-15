@@ -1,0 +1,20 @@
+---
+- name: Deploy PetStore Container and Service
+  hosts:  openshift
+  become: true
+  vars_files:
+    - ../vars/group_vars/pocb/all.yml  
+
+  tasks:
+    - module_defaults:
+        group/k8s:
+          validate_certs: no
+          kubeconfig: "/root/ocp-install-{{cluster_name}}/auth/kubeconfig"
+          
+      name: Run Conjur Follower Tasks
+      block:
+        
+        - import_role:
+            name: postgresql
+        - import_role:
+            name: pet-store

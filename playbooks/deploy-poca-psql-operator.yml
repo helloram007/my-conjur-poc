@@ -1,0 +1,11 @@
+---
+- name: Deploy PetStore Container and Service From Openshift Templates(From Catalog) on POC-A.
+  hosts:  openshift
+  become: true
+  vars:
+    cluster_name: poca-ft
+  # vars_files:
+  #   - ../vars/group_vars/pocb/all.yml  
+  tasks:
+    - include_role:
+        name: operator-templates

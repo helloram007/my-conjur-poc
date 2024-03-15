@@ -1,0 +1,11 @@
+---
+- name: Setup Policies on DAP Master POCB
+  hosts: openshift
+  become: yes
+  gather_facts: yes
+  vars_files:
+    - ../vars/group_vars/pocb/all.yml
+
+  tasks:
+    - include_role:
+        name: policies-setup
